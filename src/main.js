@@ -1,16 +1,26 @@
-import App from './App.vue'
-import * as Vue from 'vue';
-import * as VueRouter from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 
-const routes= [
-    {path: '/', component: App},
+import HelloWorld from './components/HelloWorld.vue';
+import TheWelcome from './components/TheWelcome.vue';
+import App from './App.vue';
+import * as Vue from 'vue';
+
+const routes = [
+    {
+        path: '/',
+        component: HelloWorld
+    },
+    {
+        path: '/about',
+        component: TheWelcome
+    },
 ];
 
-const router = VueRouter.createRouter({
-    history: VueRouter.createWebHashHistory(),
-    routes: routes,
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
 });
 
-let app = Vue.createApp({})
-app.use(router)
-app.mount('#app')
+const app = Vue.createApp(App);
+app.use(router);
+app.mount('#app');

@@ -1,6 +1,11 @@
 <template>
 	<div class="container">
+		<div class="navbar">
+			<router-link class="fw-bold" to="/">Go to Home</router-link>
+			<router-link to="/about">Go to About</router-link>
+		</div>
 
+		<router-view></router-view>
 
 		<div class="card mb-3">
 			<div class="card-body">
@@ -22,7 +27,8 @@
 					<textarea v-model="newAnimal.description" class="form-control" id="desc"></textarea>
 				</div>
 				<div class="d-flex justify-content-end mt-3">
-					<button class="btn btn-primary" @click="create()">Créer</button>
+					<button v-if="!isEdition" class="btn btn-primary" @click="create()">Créer</button>
+					<button v-else class="btn btn-primary" @click="cancelEditing()">Annuler</button>
 				</div>
 			</div>
 		</div>
@@ -34,7 +40,7 @@
 						<h5 class="card-title">{{ bloup.name }}</h5>
 						<p class="card-text">{{ bloup.description }}</p>
 						<div class="d-flex justify-content-end">
-							<button class="btn btn-warning me-2">
+							<button @click="update(bloup.name)" class="btn btn-warning me-2">
 								<i class="fa-solid fa-pen-to-square"></i>
 							</button>
 							<button class="btn btn-danger" @click="deleteAnimal(bloup.name)">
@@ -51,7 +57,7 @@
 						<h5 class="card-title">{{ graw.name }}</h5>
 						<p class="card-text">{{ graw.description }}</p>
 						<div class="d-flex justify-content-end">
-							<button class="btn btn-warning me-2">
+							<button @click="update(graw.name)" class="btn btn-warning me-2">
 								<i class="fa-solid fa-pen-to-square"></i>
 							</button>
 							<button class="btn btn-danger" @click="deleteAnimal(graw.name)">
@@ -68,7 +74,7 @@
 						<h5 class="card-title">{{ nope.name }}</h5>
 						<p class="card-text">{{ nope.description }}</p>
 						<div class="d-flex justify-content-end">
-							<button class="btn btn-warning me-2">
+							<button @click="update(nope.name)" class="btn btn-warning me-2">
 								<i class="fa-solid fa-pen-to-square"></i>
 							</button>
 							<button class="btn btn-danger" @click="deleteAnimal(nope.name)">
@@ -92,6 +98,7 @@ export default {
                 type: '',
             },
             animals: [],
+            isEdition: false,
         };
     },
     methods: {
@@ -108,14 +115,25 @@ export default {
             };
         },
         deleteAnimal(name) {
-					let index = this.animals.findIndex(function (el) {
-						return el.name === name;
-					});
-					this.animals.splice(index, 1);
+            let index = this.animals.findIndex(function (el) {
+                return el.name === name;
+            });
+            this.animals.splice(index, 1);
         },
-        update() {
-
+        update(name) {
+            this.newAnimal = this.animals.find(function (el) {
+                return el.name === name;
+            });
+            this.isEdition = true;
         },
+        cancelEditing() {
+            this.isEdition = false;
+            this.newAnimal = {
+                name: '',
+                description: '',
+                type: '',
+            };
+        }
     },
     computed: {
         bloups() {
